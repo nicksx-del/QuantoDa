@@ -5,7 +5,6 @@
 
 ![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow)
 ![Tech Stack](https://img.shields.io/badge/Stack-Next.js_|_Supabase_|_OpenAI-blue)
-![Pagamentos](https://img.shields.io/badge/Pagamentos-AbacatePay-green)
 
 ## 📖 Sobre o Projeto
 
