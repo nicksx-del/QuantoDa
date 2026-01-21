@@ -1,82 +1,40 @@
-# 💸 QuantoDá?
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-> **Descubra assinaturas "fantasmas" e pare de perder dinheiro.**
-> Um Micro SaaS que analisa extratos bancários com IA para encontrar gastos recorrentes e sugerir economia.
+## Getting Started
 
-![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow)
-![Tech Stack](https://img.shields.io/badge/Stack-Next.js_|_Supabase_|_OpenAI-blue)
+First, run the development server:
 
-## 📖 Sobre o Projeto
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-**QuantoDá?** é uma solução focada em Saúde Financeira com fricção zero. O problema é claro: as pessoas assinam serviços, esquecem, e perdem dinheiro todo mês.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-A aplicação permite que o usuário faça upload de faturas (PDF) ou extratos (CSV). Utilizamos Inteligência Artificial para ler "bancarês", identificar padrões de recorrência (ex: Netflix, Gympass, Spotify) e apresentar um dashboard claro de quanto isso custa por ano.
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-**Diferencial:** Não pedimos senhas bancárias. Funciona via análise de arquivo (Upload), garantindo privacidade e segurança.
+[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
----
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
-## ✨ Funcionalidades Principais
+This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-* **🕵️ Análise Inteligente:** Processamento de PDF/CSV para extração de texto.
-* **🤖 Categorização via IA:** Identifica assinaturas recorrentes vs. gastos pontuais.
-* **⚡ Login Social:** Autenticação rápida com Google (via Supabase) para evitar spam.
-* **💎 Sistema de Créditos:**
-    * **Freemium:** 1 crédito grátis ao cadastrar.
-    * **Pay-wall:** Bloqueio de novas análises após o uso do crédito.
-* **pix Pagamento Instantâneo:** Integração com **AbacatePay** para compra de pacotes de créditos via Pix.
-* **💡 Consultor Financeiro (Premium):** A IA sugere trocas de planos e alertas de gastos duplicados (ex: 3 streamings de vídeo).
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## 🛠️ Tech Stack
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
 
-A arquitetura foi pensada para **Speed to Revenue** (rapidez de desenvolvimento e baixo custo).
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-* **Frontend:** [Next.js 14+](https://nextjs.org/) (App Router) + Tailwind CSS + Shadcn/ui (para UI rápida).
-* **Backend & Auth:** [Supabase](https://supabase.com/) (PostgreSQL + Auth Google).
-* **AI Engine:** [OpenAI GPT-4o-mini](https://openai.com/) ou [Gemini Flash](https://deepmind.google/technologies/gemini/) (Custo baixo e alta velocidade).
-* **Pagamentos:** [AbacatePay](https://abacatepay.com/) (Checkout transparente e Webhooks).
-* **Processamento de Arquivos:** `pdf-parse` (Node.js).
+## Deploy on Vercel
 
----
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## 🗄️ Estrutura do Banco de Dados (Supabase)
-
-O sistema utiliza triggers para criar o perfil do usuário automaticamente após o login.
-
-### Tabela: `profiles`
-| Coluna | Tipo | Descrição |
-| :--- | :--- | :--- |
-| `id` | uuid | ID do usuário (fkey auth.users) |
-| `email` | text | Email do usuário |
-| `credits` | int | Saldo de créditos (Padrão: 1) |
-| `is_premium` | bool | Status Premium |
-| `created_at` | timestamp | Data de cadastro |
-
----
-
-## 💰 Fluxo de Monetização
-
-1.  Usuário gasta seu crédito grátis.
-2.  Tenta fazer nova análise -> **Modal de Paywall abre**.
-3.  Usuário seleciona "Pack 3 Análises" (R$ 19,90).
-4.  Chamada API AbacatePay -> Gera Pix QR Code.
-5.  Usuário paga -> AbacatePay envia Webhook (`/api/webhooks/abacate`).
-6.  Backend valida assinatura e adiciona `+3` na coluna `credits` do usuário.
-
----
-
-## 🛡️ Privacidade e Segurança
-
-* **Zero Persistência de Arquivos:** Os PDFs enviados são processados em memória (RAM) e descartados imediatamente após a extração do texto. Não salvamos extratos bancários no Storage.
-* **Anonimização:** A IA recebe apenas os descritivos das transações, sem dados sensíveis de conta/agência.
-
----
-
-## 📝 Licença
-
-Este projeto é proprietário. Todos os direitos reservados.
-
----
-*Feito com ☕ e código para ajudar brasileiros a economizarem.*
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
