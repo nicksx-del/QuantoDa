@@ -5,6 +5,7 @@ import { UploadZone } from './components/UploadZone';
 import { Dashboard } from './components/Dashboard';
 import { PaywallModal } from './components/PaywallModal';
 import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 import { analyzeFinancialStatement } from './services/geminiService';
 import { AnalysisResult } from './types';
 import { Loader2 } from 'lucide-react';
@@ -79,27 +80,31 @@ const App: React.FC = () => {
 
   // Render Logic
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-brand-200 selection:text-brand-900">
       <Header
         isLoggedIn={isLoggedIn}
         credits={credits}
-        onLogin={handleLogin}
+        onLogin={() => setShowLogin(true)}
         onLogout={handleLogout}
         onBuyCredits={() => setShowPaywall(true)}
       />
 
-      <main className="flex-grow container mx-auto px-4 py-8">
+      <main className="flex-grow container mx-auto px-4 py-8 pt-24 animate-fade-in">
         {!isLoggedIn ? (
           showLogin ? (
-            <Login
-              onLogin={handleLogin}
-              onBack={() => setShowLogin(false)}
-            />
+            <div className="animate-slide-up">
+              <Login
+                onLogin={handleLogin}
+                onBack={() => setShowLogin(false)}
+              />
+            </div>
           ) : (
-            <Hero onLogin={() => setShowLogin(true)} />
+            <div className="animate-slide-up">
+              <Hero onLogin={() => setShowLogin(true)} />
+            </div>
           )
         ) : (
-          <div className="max-w-5xl mx-auto space-y-8">
+          <div className="max-w-5xl mx-auto space-y-8 animate-slide-up">
             {/* Context Header */}
             <div className="mb-6">
               <h1 className="text-3xl font-bold text-slate-800">
@@ -114,22 +119,22 @@ const App: React.FC = () => {
 
             {/* Main Content Area */}
             {isAnalyzing ? (
-              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl shadow-sm border border-slate-200">
+              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl shadow-sm border border-slate-200 animate-pulse-slow">
                 <Loader2 className="w-12 h-12 text-brand-500 animate-spin mb-4" />
                 <h3 className="text-xl font-semibold text-slate-700">A IA está lendo seu extrato...</h3>
                 <p className="text-slate-500 mt-2">Identificando padrões de consumo e assinaturas.</p>
               </div>
             ) : analysisResult ? (
-              <div className="animate-fade-in">
+              <div className="animate-scale-in">
                 <Dashboard
                   data={analysisResult}
                   onReset={() => setAnalysisResult(null)}
                 />
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 hover:shadow-md transition-shadow duration-300">
                 {error && (
-                  <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                  <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 animate-shake">
                     {error}
                   </div>
                 )}
@@ -140,10 +145,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-6 text-center text-slate-500 text-sm">
-        <p>&copy; 2026 QuantoDá? - Economia inteligente com IA.</p>
-      </footer>
+      <Footer />
 
       {/* Modals */}
       {showPaywall && (

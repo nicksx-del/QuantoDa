@@ -4,10 +4,10 @@ import { AnalysisResult } from "../types";
 // Initialize Gemini Client
 // In a production app, this call should ideally be proxying through a backend to protect the Key,
 // or use strict domain restrictions on the API Key.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 export const analyzeFinancialStatement = async (textData: string): Promise<AnalysisResult> => {
-  
+
   // Define the schema for structured output
   const schema = {
     type: Type.OBJECT,
