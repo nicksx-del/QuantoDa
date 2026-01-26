@@ -57,7 +57,6 @@ const Counter = ({ value, className }: { value: number, className?: string }) =>
   );
 };
 
-// Typewriter Effect Component
 const TypewriterText = ({ text, delay = 0 }: { text: string, delay?: number }) => {
   const [displayText, setDisplayText] = useState('');
 
@@ -82,7 +81,6 @@ const TypewriterText = ({ text, delay = 0 }: { text: string, delay?: number }) =
 export const Dashboard: React.FC<DashboardProps> = ({ data, onReset }) => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  // Simulation State
   const [items, setItems] = useState(() => data.items.map(item => ({ ...item, isActive: true })));
 
   useEffect(() => {
@@ -97,7 +95,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ data, onReset }) => {
 
   // Calculated Totals
   const totalMonthly = items.filter(i => i.isActive).reduce((acc, item) => {
-    // Very naive monthly calc: yearly / 12 for yearly items
     const amount = item.frequency === 'yearly' ? item.amount / 12 : item.amount;
     return acc + amount;
   }, 0);
@@ -183,7 +180,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data, onReset }) => {
           <div className="p-6 border-b border-slate-100 flex justify-between items-center">
             <h3 className="text-lg font-bold text-slate-800">Detalhamento de Assinaturas</h3>
             <span className="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded border border-emerald-100 flex items-center gap-1">
-              <AlignLeft size={12} /> IA Confidence High
+              <AlignLeft size={12} /> Confiança alta
             </span>
           </div>
           <div className="divide-y divide-slate-100">
@@ -252,7 +249,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ data, onReset }) => {
             <div className="relative z-10">
               <h3 className="text-lg font-bold mb-4 flex items-center justify-between">
                 <span className="flex items-center gap-2"><span className="bg-white/20 p-1 rounded">💡</span> Insights da IA</span>
-                <span className="text-[10px] uppercase tracking-wider text-slate-400 bg-slate-800 px-2 py-1 rounded-full animate-pulse">Live Analysis</span>
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 bg-slate-800 px-2 py-1 rounded-full animate-pulse">Análise em Tempo Real</span>
               </h3>
               <ul className="space-y-4">
                 {data.insights.map((insight, idx) => (

@@ -8,6 +8,8 @@ export interface SubscriptionItem {
 }
 
 export interface AnalysisResult {
+  id?: string; // UUID for history
+  createdAt?: string; // ISO Date
   totalMonthly: number;
   totalYearly: number;
   subscriptionCount: number;

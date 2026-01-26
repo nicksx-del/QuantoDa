@@ -12,15 +12,22 @@ import { AnalysisResult } from './types';
 import { CommandMenu } from './components/CommandMenu';
 import { useConsoleEasterEgg } from './hooks/useConsoleEasterEgg';
 import { useAppSounds } from './hooks/useAppSounds';
-import { Loader2 } from 'lucide-react';
+// ... imports
+import { HistoryPage } from './components/HistoryPage';
+import { useHistory } from './hooks/useHistory';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const App: React.FC = () => {
   // State Management
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  useConsoleEasterEgg(); // Easter Egg
   const { playSuccess } = useAppSounds();
+  const { history, saveAnalysis } = useHistory(); // History Hook
+
+  useConsoleEasterEgg();
+
+  // Navigation State
+  const [currentView, setCurrentView] = useState<'home' | 'history'>('home');
+
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [credits, setCredits] = useState<number>(1);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
@@ -30,7 +37,6 @@ const App: React.FC = () => {
 
   // Handlers
   const handleLogin = () => {
-    // Simulate Supabase Auth
     setIsLoggedIn(true);
     setShowLogin(false);
   };
@@ -39,6 +45,7 @@ const App: React.FC = () => {
     setIsLoggedIn(false);
     setAnalysisResult(null);
     setError(null);
+    setCurrentView('home');
   };
 
   const handleFileUpload = async (file: File | null, mockText?: string) => {
@@ -53,7 +60,6 @@ const App: React.FC = () => {
     try {
       let textToAnalyze = mockText || "";
 
-      // Simple text extraction for CSV/TXT (In a real app, PDF parsing would happen here or backend)
       if (file && !mockText) {
         if (file.type === "text/csv" || file.type === "text/plain") {
           textToAnalyze = await file.text();
@@ -68,8 +74,10 @@ const App: React.FC = () => {
 
       const result = await analyzeFinancialStatement(textToAnalyze);
 
-      playSuccess(); // Audio Feedback
+      playSuccess();
       setAnalysisResult(result);
+      saveAnalysis(result);
+      setCurrentView('home');
       setCredits(prev => prev - 1);
     } catch (err) {
       console.error(err);
@@ -114,50 +122,66 @@ const App: React.FC = () => {
               </motion.div>
             )
           ) : (
-            <motion.div
-              key="dashboard"
-              layoutId="container-main"
-              className="max-w-5xl mx-auto space-y-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {/* Context Header */}
-              <div className="mb-6">
-                <h1 className="text-3xl font-bold text-slate-800">
-                  {analysisResult ? "Seu Diagnóstico Financeiro" : "Nova Análise"}
-                </h1>
-                <p className="text-slate-600">
-                  {analysisResult
-                    ? "A IA identificou as seguintes assinaturas e gastos recorrentes."
-                    : "Faça upload do seu extrato (CSV) ou fatura para identificar gastos invisíveis."}
-                </p>
-              </div>
-
-              {/* Main Content Area */}
-              {isAnalyzing ? (
-                <DashboardSkeleton />
-              ) : analysisResult ? (
-                <div className="animate-scale-in">
-                  <Dashboard
-                    data={analysisResult}
-                    onReset={() => setAnalysisResult(null)}
-                  />
+            // Authenticated Views
+            currentView === 'history' ? (
+              <motion.div key="history" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <HistoryPage
+                  history={history}
+                  onBack={() => setCurrentView('home')}
+                  onViewDetail={(item) => {
+                    setAnalysisResult(item);
+                    setCurrentView('home');
+                  }}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="dashboard"
+                layoutId="container-main"
+                className="max-w-5xl mx-auto space-y-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                {/* Context Header */}
+                <div className="mb-6 flex justify-between items-end">
+                  <div>
+                    <h1 className="text-3xl font-bold text-slate-800">
+                      {analysisResult ? "Seu Diagnóstico Financeiro" : "Nova Análise"}
+                    </h1>
+                    <p className="text-slate-600">
+                      {analysisResult
+                        ? "A IA identificou as seguintes assinaturas e gastos recorrentes."
+                        : "Faça upload do seu extrato (CSV) ou fatura para identificar gastos invisíveis."}
+                    </p>
+                  </div>
                 </div>
-              ) : (
-                <motion.div
-                  layoutId="upload-card"
-                  className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 hover:shadow-md transition-shadow duration-300"
-                >
-                  {error && (
-                    <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 animate-shake">
-                      {error}
-                    </div>
-                  )}
-                  <UploadZone onUpload={handleFileUpload} />
-                </motion.div>
-              )}
-            </motion.div>
+
+                {/* Main Content Area */}
+                {isAnalyzing ? (
+                  <DashboardSkeleton />
+                ) : analysisResult ? (
+                  <div className="animate-scale-in">
+                    <Dashboard
+                      data={analysisResult}
+                      onReset={() => setAnalysisResult(null)}
+                    />
+                  </div>
+                ) : (
+                  <motion.div
+                    layoutId="upload-card"
+                    className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 hover:shadow-md transition-shadow duration-300"
+                  >
+                    {error && (
+                      <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200 animate-shake">
+                        {error}
+                      </div>
+                    )}
+                    <UploadZone onUpload={handleFileUpload} />
+                  </motion.div>
+                )}
+              </motion.div>
+            )
           )}
         </AnimatePresence>
       </main>
@@ -175,15 +199,21 @@ const App: React.FC = () => {
       <CommandMenu
         onUpload={() => {
           if (!isLoggedIn) setShowLogin(true);
-          else setAnalysisResult(null); // Reset to upload screen
+          else {
+            setAnalysisResult(null);
+            setCurrentView('home');
+          }
         }}
         onHome={() => {
           setIsLoggedIn(false);
           setShowLogin(false);
+          setCurrentView('home');
         }}
         onDashboard={() => {
-          if (isLoggedIn) setAnalysisResult(null); // Just go to main dash view
-          else setShowLogin(true);
+          if (isLoggedIn) {
+            setAnalysisResult(null);
+            setCurrentView('home');
+          } else setShowLogin(true);
         }}
       />
     </div>

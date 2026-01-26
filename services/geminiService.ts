@@ -44,6 +44,7 @@ export const analyzeFinancialStatement = async (textData: string): Promise<Analy
     Ignore one-off transfers or food delivery unless it's a subscription (like iFood Club).
     
     Return the response in JSON format matching the schema.
+    IMPORTANT: All text fields (recommendations, insights, category names) MUST be in Portuguese (pt-BR).
     If the text is empty or meaningless, return a result with 0 items but a polite insight asking for a valid file.
     
     Text Data to Analyze:

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Command } from 'cmdk';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Home, LayoutDashboard, Settings, FileUp, Moon, HelpCircle, MessageCircle } from 'lucide-react';
+import { Search, Home, LayoutDashboard, Settings, FileUp, Moon, HelpCircle, MessageCircle, Clock } from 'lucide-react';
 import { useAppSounds } from '../hooks/useAppSounds';
 
 interface CommandMenuProps {
     onUpload: () => void;
     onHome: () => void;
     onDashboard: () => void; // If accessed via state
+    onHistory: () => void;
 }
 
-export const CommandMenu: React.FC<CommandMenuProps> = ({ onUpload, onHome, onDashboard }) => {
+export const CommandMenu: React.FC<CommandMenuProps> = ({ onUpload, onHome, onDashboard, onHistory }) => {
     const [open, setOpen] = useState(false);
     const { playSwitch } = useAppSounds();
 
@@ -65,6 +66,9 @@ export const CommandMenu: React.FC<CommandMenuProps> = ({ onUpload, onHome, onDa
                                     </CommandItem>
                                     <CommandItem icon={<LayoutDashboard size={18} />} onSelect={() => { onDashboard(); setOpen(false); }}>
                                         Ir para Dashboard
+                                    </CommandItem>
+                                    <CommandItem icon={<Clock size={18} />} onSelect={() => { onHistory(); setOpen(false); }}>
+                                        Ver Linha do Tempo
                                     </CommandItem>
                                     <CommandItem icon={<Settings size={18} />} onSelect={() => setOpen(false)}>
                                         Ir para Configurações

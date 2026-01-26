@@ -30,7 +30,6 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUpload }) => {
   const onDrop = (acceptedFiles: File[]) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       setSelectedFile(acceptedFiles[0]);
-      // "Thud" effect
       controls.start({
         scale: [1.02, 0.98, 1],
         transition: { duration: 0.3 }
@@ -52,7 +51,6 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUpload }) => {
     if (selectedFile) {
       onUpload(selectedFile);
     } else {
-      // Shake button if no file
       buttonShakeControls.start({
         x: [0, -5, 5, -5, 5, 0],
         transition: { duration: 0.4 }
@@ -77,15 +75,14 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUpload }) => {
           whileHover={{ scale: selectedFile ? 1 : 1.01 }}
           whileTap={{ scale: 0.99 }}
           className={`relative border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer overflow-hidden transition-colors duration-300 ${isDragActive
-              ? "border-brand-500 bg-brand-50/50"
-              : selectedFile
-                ? "border-emerald-400 bg-emerald-50/30"
-                : "border-slate-300 bg-slate-50 hover:bg-slate-100/50"
+            ? "border-brand-500 bg-brand-50/50"
+            : selectedFile
+              ? "border-emerald-400 bg-emerald-50/30"
+              : "border-slate-300 bg-slate-50 hover:bg-slate-100/50"
             }`}
         >
           <input {...getInputProps()} />
 
-          {/* Idle Animation: SVG Dash Offset */}
           {!isDragActive && !selectedFile && (
             <svg className="absolute inset-0 w-full h-full pointer-events-none stroke-slate-300" style={{ strokeWidth: 2, fill: 'none' }}>
               <motion.rect
@@ -111,7 +108,6 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUpload }) => {
               >
                 <div className="relative mb-4 mx-auto w-16 h-16 flex items-center justify-center bg-white rounded-xl shadow-sm border border-slate-100">
                   <FileSpreadsheet className="w-8 h-8 text-emerald-500" />
-                  {/* Scan Effect */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/50 to-transparent w-full h-full"
                     animate={{ x: ['-100%', '100%'] }}
@@ -181,8 +177,8 @@ export const UploadZone: React.FC<UploadZoneProps> = ({ onUpload }) => {
           animate={buttonShakeControls}
           layout
           className={`px-8 py-3 rounded-xl font-bold text-white shadow-lg transition-all flex items-center gap-2 ${selectedFile
-              ? "bg-brand-600 hover:bg-brand-700 hover:-translate-y-0.5 shadow-brand-500/30"
-              : "bg-slate-300 cursor-not-allowed"
+            ? "bg-brand-600 hover:bg-brand-700 hover:-translate-y-0.5 shadow-brand-500/30"
+            : "bg-slate-300 cursor-not-allowed"
             }`}
         >
           {selectedFile && <ScanLine size={18} className="animate-pulse" />}
