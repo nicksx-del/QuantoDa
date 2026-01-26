@@ -132,7 +132,7 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-6 text-center text-slate-500 text-sm">
-        <p>© 2024 QuantoDá? - Economia inteligente com IA.</p>
+        <p>&copy; 2026 QuantoDá? - Economia inteligente com IA.</p>
       </footer>
 
       {/* Modals */}
