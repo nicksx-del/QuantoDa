@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Hero } from './components/Hero';
+import { Login } from './components/LoginScreen';
 import { UploadZone } from './components/UploadZone';
 import { Dashboard } from './components/Dashboard';
 import { PaywallModal } from './components/PaywallModal';
@@ -11,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 const App: React.FC = () => {
   // State Management
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [showLogin, setShowLogin] = useState<boolean>(false);
   const [credits, setCredits] = useState<number>(1);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
@@ -21,6 +23,7 @@ const App: React.FC = () => {
   const handleLogin = () => {
     // Simulate Supabase Auth
     setIsLoggedIn(true);
+    setShowLogin(false);
   };
 
   const handleLogout = () => {
@@ -55,7 +58,7 @@ const App: React.FC = () => {
       }
 
       const result = await analyzeFinancialStatement(textToAnalyze);
-      
+
       setAnalysisResult(result);
       setCredits(prev => prev - 1);
     } catch (err) {
@@ -77,17 +80,24 @@ const App: React.FC = () => {
   // Render Logic
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
-      <Header 
-        isLoggedIn={isLoggedIn} 
-        credits={credits} 
-        onLogin={handleLogin} 
-        onLogout={handleLogout} 
+      <Header
+        isLoggedIn={isLoggedIn}
+        credits={credits}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
         onBuyCredits={() => setShowPaywall(true)}
       />
 
       <main className="flex-grow container mx-auto px-4 py-8">
         {!isLoggedIn ? (
-          <Hero onLogin={handleLogin} />
+          showLogin ? (
+            <Login
+              onLogin={handleLogin}
+              onBack={() => setShowLogin(false)}
+            />
+          ) : (
+            <Hero onLogin={() => setShowLogin(true)} />
+          )
         ) : (
           <div className="max-w-5xl mx-auto space-y-8">
             {/* Context Header */}
@@ -96,8 +106,8 @@ const App: React.FC = () => {
                 {analysisResult ? "Seu Diagnóstico Financeiro" : "Nova Análise"}
               </h1>
               <p className="text-slate-600">
-                {analysisResult 
-                  ? "A IA identificou as seguintes assinaturas e gastos recorrentes." 
+                {analysisResult
+                  ? "A IA identificou as seguintes assinaturas e gastos recorrentes."
                   : "Faça upload do seu extrato (CSV) ou fatura para identificar gastos invisíveis."}
               </p>
             </div>
@@ -111,9 +121,9 @@ const App: React.FC = () => {
               </div>
             ) : analysisResult ? (
               <div className="animate-fade-in">
-                <Dashboard 
-                  data={analysisResult} 
-                  onReset={() => setAnalysisResult(null)} 
+                <Dashboard
+                  data={analysisResult}
+                  onReset={() => setAnalysisResult(null)}
                 />
               </div>
             ) : (
@@ -137,9 +147,9 @@ const App: React.FC = () => {
 
       {/* Modals */}
       {showPaywall && (
-        <PaywallModal 
-          onClose={() => setShowPaywall(false)} 
-          onPurchase={handleBuyCredits} 
+        <PaywallModal
+          onClose={() => setShowPaywall(false)}
+          onPurchase={handleBuyCredits}
         />
       )}
     </div>
