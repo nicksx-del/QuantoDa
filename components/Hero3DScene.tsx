@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, Sphere, Box, Torus, Icosahedron, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const FloatingSatellite = ({ geometry, position, color, speed = 1, delay = 0 }: any) => {
     const meshRef = useRef<THREE.Mesh>(null);
@@ -102,7 +103,20 @@ const SceneContent = () => {
     );
 };
 
+
+
 export const Hero3DScene: React.FC = () => {
+    const isMobile = useIsMobile();
+
+    if (isMobile) {
+        return (
+            <div className="w-full h-[300px] absolute top-0 left-0 -z-10 bg-gradient-to-br from-white to-brand-50 flex items-center justify-center opacity-40">
+                {/* Fallback Static Visual */}
+                <div className="w-40 h-40 bg-brand-100/50 rounded-full blur-3xl animate-pulse"></div>
+            </div>
+        )
+    }
+
     return (
         <div className="w-full h-[500px] md:h-[600px] absolute top-0 left-0 -z-10 md:z-0 md:relative md:w-1/2">
             <Canvas

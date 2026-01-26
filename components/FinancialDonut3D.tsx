@@ -2,6 +2,7 @@ import React, { useMemo, useState, useRef } from 'react';
 import { Canvas, useFrame, ThreeEvent } from '@react-three/fiber';
 import { Text, Html, Environment } from '@react-three/drei';
 import * as THREE from 'three';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 interface DataItem {
     name: string;
@@ -158,10 +159,14 @@ const DonutChartGroup = ({ data, onHoverItem }: { data: DataItem[], onHoverItem:
     )
 }
 
+
+
 export const FinancialDonut3D: React.FC<FinancialDonut3DProps> = ({ data, onHover }) => {
+    const isMobile = useIsMobile();
+
     return (
         <div className="w-full h-full min-h-[300px] cursor-grab active:cursor-grabbing">
-            <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={[1, 2]}>
+            <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={isMobile ? 1 : [1, 2]}> {/* Lower quality on mobile */}
                 <ambientLight intensity={0.6} />
                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
                 <Environment preset="city" />

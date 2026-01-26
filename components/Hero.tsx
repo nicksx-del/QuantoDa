@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, TrendingDown, Search } from 'lucide-react';
+import { ShieldCheck, TrendingDown, Search, Wallet } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeroProps {
@@ -22,7 +22,7 @@ const itemVariants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 100, damping: 20 }
+    transition: { type: "spring", stiffness: 100, damping: 20 } as any
   }
 };
 
@@ -31,7 +31,7 @@ const badgeVariants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 100, damping: 20 }
+    transition: { type: "spring", stiffness: 100, damping: 20 } as any
   }
 };
 
@@ -40,7 +40,7 @@ const wordVariants = {
   visible: {
     y: 0,
     opacity: 1,
-    transition: { type: "spring", stiffness: 100, damping: 20 }
+    transition: { type: "spring", stiffness: 100, damping: 20 } as any
   }
 };
 
@@ -50,7 +50,7 @@ const ghostVariants = {
     filter: "blur(0px)",
     scale: 1,
     opacity: 1,
-    transition: { duration: 0.8, ease: "easeOut" }
+    transition: { duration: 0.8, ease: "easeOut" } as any
   }
 };
 
@@ -83,6 +83,19 @@ export const Hero: React.FC<HeroProps> = ({ onLogin }) => {
         initial="hidden"
         animate="visible"
       >
+        {/* Morphing Logo */}
+        <motion.div
+          layoutId="logo-main"
+          className="flex items-center gap-3 mb-6"
+        >
+          <div className="bg-brand-500 text-white p-3 rounded-2xl shadow-xl shadow-brand-500/20">
+            <Wallet size={42} className="stroke-[2.5px]" />
+          </div>
+          <span className="text-4xl font-bold tracking-tight text-slate-900">
+            Quanto<span className="text-brand-600">Dá?</span>
+          </span>
+        </motion.div>
+
         {/* Badge */}
         <motion.div variants={badgeVariants} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 border border-brand-100 text-xs font-semibold uppercase tracking-wider mb-4">
           <span className="relative flex h-2 w-2">

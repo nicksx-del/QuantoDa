@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Wallet, LogIn, LogOut, Coins, Menu, X } from 'lucide-react';
 
 interface HeaderProps {
@@ -16,17 +17,22 @@ export const Header: React.FC<HeaderProps> = ({ isLoggedIn, credits, onLogin, on
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
-        <div
-          className="flex items-center gap-2 cursor-pointer group"
-          onClick={() => window.location.reload()}
-        >
-          <div className="bg-brand-500 text-white p-2 rounded-xl shadow-brand group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-            <Wallet size={24} className="stroke-[2.5px]" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-800 group-hover:text-brand-600 transition-colors">
-            Quanto<span className="text-brand-600">Dá?</span>
-          </span>
-        </div>
+        {isLoggedIn ? (
+          <motion.div
+            layoutId="logo-main"
+            className="flex items-center gap-2 cursor-pointer group"
+            onClick={() => window.location.reload()}
+          >
+            <div className="bg-brand-500 text-white p-2 rounded-xl shadow-brand group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+              <Wallet size={24} className="stroke-[2.5px]" />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-slate-800 group-hover:text-brand-600 transition-colors">
+              Quanto<span className="text-brand-600">Dá?</span>
+            </span>
+          </motion.div>
+        ) : (
+          <div className="w-10 h-10"></div> /* Spacer if logo hidden */
+        )}
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
